@@ -37,10 +37,6 @@ jobs:
       - name: Build and run tests
         run: mvn clean verify
 
-      # Step 5: Install GraalVM Native Image Tool
-      - name: Install GraalVM Native Image
-        run: gu install native-image
-
       # Step 6: Build Native Image
       - name: Build Native Image
         run: mvn package -Pnative -DskipTests=true
