@@ -1,0 +1,25 @@
+<!-- fragments/movie-cards.html -->
+<div th:fragment="movieCards">
+    <div th:each="movie : ${movies}" class="bg-white shadow-md rounded-lg p-4 mb-4">
+        <h2 class="text-xl font-semibold mb-2" th:text="${movie.title}">Movie Title</h2>
+        <p class="text-gray-700 mb-4" th:text="${movie.description}">Movie Description</p>
+        <p class="text-sm text-gray-500" th:text="'Added by: ' + ${movie.username}">Added by: User</p>
+        <div class="mt-4">
+            <button hx-post="/movies/${movie.id}/like" hx-swap="outerHTML" hx-target="#like-count-${movie.id}"
+                    class="bg-green-500 text-white px-2 py-1 rounded">
+                Like
+            </button>
+            <span id="like-count-${movie.id}" class="text-sm text-gray-700 ml-2">
+                        Likes: <span th:text="${movie.likedCount}">0</span>
+                    </span>
+
+            <button hx-post="/movies/${movie.id}/dislike" hx-swap="outerHTML" hx-target="#dislike-count-${movie.id}"
+                    class="bg-red-500 text-white px-2 py-1 rounded ml-4">
+                Dislike
+            </button>
+            <span id="dislike-count-${movie.id}" class="text-sm text-gray-700 ml-2">
+                        Dislikes: <span th:text="${movie.dislikedCount}">0</span>
+                    </span>
+        </div>
+    </div>
+</div>
