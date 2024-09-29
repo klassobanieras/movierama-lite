@@ -6,31 +6,9 @@ import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface MovieRepository extends ListCrudRepository<Movie, Long> {
-
-    @Query("""
-    SELECT m.id, m.title, m.description, m.liked_count, m.disliked_count, u.username
-    FROM movies m
-        LEFT JOIN public.users u on u.id = m.added_by
-    ORDER BY :orderBy DESC
-    LIMIT :limit
-    OFFSET :offset
-    """)
-    List<MovieDto> findAll(@Param("limit") int limit, @Param("offset") int offset, @Param("orderBy") String orderBy);
-
-    @Query("""
-    SELECT m.title, m.description, m.liked_count, m.disliked_count, u.username
-    FROM movies m
-        LEFT JOIN public.users u on u.id = m.added_by
-    WHERE u.username = :username
-    ORDER BY :orderBy DESC
-    LIMIT :limit
-    OFFSET :offset
-    """)
-    List<MovieDto> findAllOfUser(@Param("username") String username, @Param("limit") int limit, @Param("offset") int offset, @Param("orderBy") String orderBy);
 
     @Query("""
     SELECT m.title, m.description, u.username

@@ -18,14 +18,16 @@ class UserRepositoryTest extends MovieRamaLiteApplicationTests {
     private UserRepository userRepository;
     @Autowired
     private MovieRepository movieRepository;
+    @Autowired
+    private ReactionRepository reactionRepository;
     @BeforeEach
     void setUp() {
         User defaultUser = UserMother.createDefaultUser();
         User user = userRepository.save(defaultUser);
         Movie likedMovie = movieRepository.save(MovieMother.createMovieWithName(user, "liked movie"));
-        user.likeMovie(likedMovie.id());
+        reactionRepository.save(new Reaction(likedMovie.id(), user.id(),ReactionType.LIKE));
         Movie dislikedMovie = movieRepository.save(MovieMother.createMovieWithName(user, "disliked movie"));
-        user.dislikeMovie(dislikedMovie.id());
+        reactionRepository.save(new Reaction(dislikedMovie.id(), user.id(),ReactionType.DISLIKE));
         userRepository.save(user);
     }
 

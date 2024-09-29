@@ -1,6 +1,5 @@
 package com.movierama.lite.shared;
 
-import com.movierama.lite.MovieRamaLiteApplication;
 import com.movierama.lite.movie.Movie;
 import com.movierama.lite.movie.MovieRepository;
 import com.movierama.lite.user.User;
@@ -27,8 +26,8 @@ public class BootStrap {
     @EventListener(ApplicationReadyEvent.class)
     public void setup() {
         if (userRepository.count() == 0) {
-            var user = userRepository.save(new User("john", bCryptPasswordEncoder.encode("12345"), "john@email.com"));
-            var user2 = userRepository.save(new User("bea", "12345", "bea@email.com"));
+            var user = userRepository.save(new User("john", bCryptPasswordEncoder.encode("12345")));
+            var user2 = userRepository.save(new User("bea", bCryptPasswordEncoder.encode("12345")));
             var movie = movieRepository.save(new Movie("movie 1", "a small description", user.id()));
             movieRepository.incrementLikedCount(movie.id());
             movieRepository.incrementLikedCount(movie.id());

@@ -1,7 +1,5 @@
 package com.movierama.lite.movie;
 
-import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
-import com.movierama.lite.shared.dto.MovieDto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -18,7 +16,7 @@ public record Movie(
         @Column(value = "added_by") Long addedByUserId,
         @Column(value = "creation_date") Instant creationDate) {
 
-        public Movie(String name, String description, Long addedByUserId) {
-                this(null, name, description, 0L, 0L, addedByUserId, Instant.now());
-        }
+    public Movie(String name, String description, Long addedByUserId) {
+        this(null, name, description, 0L, 0L, addedByUserId, Instant.now());
+    }
 }
