@@ -1,6 +1,7 @@
-package com.movierama.lite.user;
+package com.movierama.lite.reaction;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -8,7 +9,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 @Table(name = "reactions")
-public record Reaction(@Id Long id,
+record Reaction(@Id Long id,
                       @Column("user_id") Long userId,
                       @Column("movie_id") Long movieId,
                       ReactionType reactionType,
@@ -18,12 +19,8 @@ public record Reaction(@Id Long id,
         this(null, userId, movieId, reactionType, Instant.now());
     }
 
-    public static Reaction like(Long movieId, Long userId) {
-        return new Reaction(movieId, userId, ReactionType.LIKE);
-    }
-
-    public static Reaction dislike(Long movieId, Long userId) {
-        return new Reaction(movieId, userId, ReactionType.DISLIKE);
+    @PersistenceCreator
+    public Reaction {
     }
 
     @Override

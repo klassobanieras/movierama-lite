@@ -1,7 +1,6 @@
-package com.movierama.lite.user;
+package com.movierama.lite.shared.security;
 
-import com.movierama.lite.shared.CustomUserDetails;
-import com.movierama.lite.shared.UserService;
+import com.movierama.lite.shared.dto.MovieramaUser;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -37,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login(@AuthenticationPrincipal CustomUserDetails user) {
+    public String login(@AuthenticationPrincipal MovieramaUser user) {
         return "login";
     }
 }

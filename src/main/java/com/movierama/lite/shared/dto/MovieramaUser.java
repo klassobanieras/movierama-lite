@@ -1,11 +1,11 @@
-package com.movierama.lite.shared;
+package com.movierama.lite.shared.dto;
 
-import com.movierama.lite.user.ReactionType;
+import com.movierama.lite.reaction.ReactionType;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Map;
 
-public interface CustomUserDetails extends UserDetails {
+public interface MovieramaUser extends UserDetails {
 
     Map<Long, ReactionType> reactions();
 

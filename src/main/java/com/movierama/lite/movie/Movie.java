@@ -1,13 +1,14 @@
 package com.movierama.lite.movie;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.Instant;
 
 @Table(name = "movies")
-public record Movie(
+record Movie(
         @Id Long id,
         @Column(value = "title") String title,
         @Column(value = "description") String description,
@@ -18,5 +19,9 @@ public record Movie(
 
     public Movie(String name, String description, Long addedByUserId) {
         this(null, name, description, 0L, 0L, addedByUserId, Instant.now());
+    }
+
+    @PersistenceCreator
+    public Movie {
     }
 }

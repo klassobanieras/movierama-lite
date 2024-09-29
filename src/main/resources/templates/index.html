@@ -3,27 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movies</title>
+    <title>Movierama</title>
     <script src="https://unpkg.com/htmx.org@2.0.2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <!-- JavaScript Functions to Increment Count and Trigger HTMX Request -->
+    <link rel="icon" href="/favicon.ico" type="image/png">
 </head>
 <body class="bg-gray-100">
-
-<!-- Top Bar with Sign In/Sign Up or Username -->
 <div class="container mx-auto mt-5 mb-5">
     <div class="flex justify-between">
-        <a href="/"><h1 class="text-2xl font-bold">Movie Platform</h1></a>
-
+        <a href="/"><h1 class="text-2xl font-bold">Movierama</h1></a>
         <div>
-            <!-- If the user is authenticated, show the username -->
             <span sec:authorize="isAuthenticated()">
                     Welcome, <strong sec:authentication="name">Username</strong>!
                     <a href="/logout" class="bg-red-500 text-white px-4 py-2 rounded ml-4">Logout</a>
                 </span>
-
-            <!-- If the user is not authenticated, show Sign In and Sign Up buttons -->
             <span sec:authorize="!isAuthenticated()">
                     <a href="/login" class="bg-blue-500 text-white px-4 py-2 rounded">Sign In</a>
                     <a href="/signup" class="bg-green-500 text-white px-4 py-2 rounded ml-2">Sign Up</a>
@@ -31,31 +25,28 @@
         </div>
     </div>
 </div>
-
-<!-- Container for Movies and Sorting -->
 <div class="container mx-auto mt-10">
-    <h1 class="text-2xl font-bold mb-6">Movies with Usernames</h1>
-
-    <!-- Sorting Controls -->
+    <h1 class="text-2xl font-bold mb-6">Movies </h1>
     <div class="mb-6">
         <form hx-get="/?htmx=true"
               hx-trigger="change"
               hx-target="#movieContainer"
               hx-swap="innerHTML">
-        <label class="font-semibold mr-2">Sort by:</label>
-        <select id="sort-by"
-                class="px-4 py-2 border rounded" name="sortBy">
-
-            <option value="DATE"  th:selected="${sortBy == 'DATE'}">Date (Newest First)</option>
-            <option value="LIKES" th:selected="${sortBy == 'LIKES'}">Likes (Most Liked)</option>
-            <option value="DISLIKES" th:selected="${sortBy == 'DISLIKE'}">Dislikes (Most Disliked)</option>
-        </select>
+            <label class="font-semibold mr-2">Sort by:</label>
+            <select id="sort-by"
+                    class="px-4 py-2 border rounded" name="sortBy">
+                <option value="DATE" th:selected="${sortBy == 'DATE'}">Date (Newest First)</option>
+                <option value="LIKES" th:selected="${sortBy == 'LIKES'}">Likes (Most Liked)</option>
+                <option value="DISLIKES" th:selected="${sortBy == 'DISLIKE'}">Dislikes (Most Disliked)</option>
+            </select>
         </form>
     </div>
-
-    <!-- Movie List Container -->
     <div id="movieContainer" th:replace="~{fragments/movie-container :: movieContainer (movies=${movies})}"></div>
+    <div class="fixed bottom-4 right-4">
+        <a href="/movies" class="bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600">
+            <i class="fas fa-plus"></i>
+        </a>
+    </div>
 </div>
-
 </body>
 </html>

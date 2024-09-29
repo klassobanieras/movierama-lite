@@ -1,18 +1,19 @@
-package com.movierama.lite.user;
+package com.movierama.lite.shared.security;
 
-import com.movierama.lite.shared.CustomUserDetails;
-import com.movierama.lite.shared.dto.Dislike;
-import com.movierama.lite.shared.dto.Like;
-import com.movierama.lite.shared.dto.UserDto;
+import com.movierama.lite.reaction.ReactionType;
+import com.movierama.lite.shared.dto.MovieramaUser;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceCreator;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.time.Instant;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Table(name = "users")
 public record User(
@@ -20,10 +21,15 @@ public record User(
         @Column(value = "username") String username,
         @Column(value = "password") String password,
         @Column(value = "creation_date") Instant creationDate,
-        Map<Long, ReactionType> reactions) implements CustomUserDetails {
+        @Transient Map<Long, ReactionType> reactions) implements MovieramaUser {
 
     public User(String username, String password) {
         this(null, username, password, Instant.now(), new HashMap<>());
+    }
+
+    @PersistenceCreator
+    public User(Long id, String username, String password, Instant creationDate) {
+        this(id, username, password, creationDate, new HashMap<>());
     }
 
     @Override

@@ -1,16 +1,17 @@
 package com.movierama.lite.movie;
 
 import com.movierama.lite.shared.dto.MovieDto;
-import com.movierama.lite.user.User;
+import com.movierama.lite.shared.security.User;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
-public class MovieService {
+class MovieService {
 
     private final MovieRepository movieRepository;
     private final JdbcClient jdbcClient;
@@ -47,8 +48,8 @@ public class MovieService {
                 .query(MovieDto.class).list();
     }
 
-    public MovieDto findById(long id) {
-        return movieRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Movie not found"));
+    public Optional<MovieDto> findById(long id) {
+        return movieRepository.findById(id);
     }
 
     public enum MovieOrder {

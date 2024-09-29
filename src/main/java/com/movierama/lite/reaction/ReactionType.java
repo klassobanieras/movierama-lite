@@ -1,4 +1,4 @@
-package com.movierama.lite.user;
+package com.movierama.lite.reaction;
 
 public enum ReactionType {
     LIKE,

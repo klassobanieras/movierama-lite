@@ -1,52 +1,39 @@
 package com.movierama.lite.shared;
 
-import com.movierama.lite.movie.Movie;
-import com.movierama.lite.movie.MovieRepository;
-import com.movierama.lite.user.User;
-import com.movierama.lite.user.UserRepository;
+import com.movierama.lite.movie.MovieController;
+import com.movierama.lite.shared.dto.MovieDto;
+import com.movierama.lite.shared.security.User;
+import com.movierama.lite.shared.security.UserRepository;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.stream.IntStream;
 
 @Component
 public class BootStrap {
 
     private final UserRepository userRepository;
-    private final MovieRepository movieRepository;
+    private final MovieController movieController;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public BootStrap(UserRepository userRepository, MovieRepository movieRepository) {
+    public BootStrap(UserRepository userRepository, MovieController movieController) {
         this.userRepository = userRepository;
-        this.movieRepository = movieRepository;
+        this.movieController = movieController;
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
 
     @EventListener(ApplicationReadyEvent.class)
+    @Transactional
     public void setup() {
         if (userRepository.count() == 0) {
             var user = userRepository.save(new User("john", bCryptPasswordEncoder.encode("12345")));
             var user2 = userRepository.save(new User("bea", bCryptPasswordEncoder.encode("12345")));
-            var movie = movieRepository.save(new Movie("movie 1", "a small description", user.id()));
-            movieRepository.incrementLikedCount(movie.id());
-            movieRepository.incrementLikedCount(movie.id());
-            movieRepository.incrementLikedCount(movie.id());
-            movieRepository.incrementLikedCount(movie.id());
-            movieRepository.incrementLikedCount(movie.id());
-            movieRepository.incrementDislikedCount(movie.id());
-            movieRepository.incrementDislikedCount(movie.id());
-
-            movieRepository.save(new Movie("movie 2", "a small description", user.id()));
-            movieRepository.save(new Movie("movie 3", "a small description", user.id()));
-            movieRepository.save(new Movie("movie 4", "a small description", user.id()));
-            movieRepository.save(new Movie("movie 5", "a small description", user.id()));
-            movieRepository.save(new Movie("movie 6", "a small description", user.id()));
-            movieRepository.save(new Movie("movie 7", "a small description", user.id()));
-            movieRepository.save(new Movie("movie 8", "a small description", user.id()));
-            movieRepository.save(new Movie("movie 9", "a small description", user.id()));
-            movieRepository.save(new Movie("movie 10", "a small description", user.id()));
-            movieRepository.save(new Movie("movie 11", "a small description", user.id()));
+            IntStream.range(1, 10)
+                    .forEach(i -> movieController.createMovie(new MovieDto(null, "Movie title " + i, "A Description fairly accurate and big", 0L, 0L, "john"), user));
         }
     }
 }

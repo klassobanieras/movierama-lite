@@ -1,4 +1,4 @@
-package com.movierama.lite.shared;
+package com.movierama.lite.shared.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

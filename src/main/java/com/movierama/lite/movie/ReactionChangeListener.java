@@ -6,7 +6,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ReactionChangeListener {
+class ReactionChangeListener {
 
     private final MovieRepository movieRepository;
 

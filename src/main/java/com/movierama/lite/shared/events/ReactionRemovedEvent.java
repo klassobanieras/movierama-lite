@@ -1,6 +1,6 @@
 package com.movierama.lite.shared.events;
 
-import com.movierama.lite.user.ReactionType;
+import com.movierama.lite.reaction.ReactionType;
 import org.springframework.context.ApplicationEvent;
 
 public class ReactionRemovedEvent extends ApplicationEvent {

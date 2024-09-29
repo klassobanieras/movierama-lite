@@ -8,10 +8,10 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface MovieRepository extends ListCrudRepository<Movie, Long> {
+interface MovieRepository extends ListCrudRepository<Movie, Long> {
 
     @Query("""
-    SELECT m.title, m.description, u.username
+    SELECT m.id, m.title, m.description, m.liked_count, m.disliked_count, u.username
     FROM movies m
         LEFT JOIN public.users u on u.id = m.added_by
     WHERE m.id = :id
