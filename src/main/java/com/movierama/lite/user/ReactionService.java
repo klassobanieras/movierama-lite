@@ -1,7 +1,9 @@
 package com.movierama.lite.user;
 
-import com.movierama.lite.movie.MovieRepository;
 import com.movierama.lite.shared.CustomUserDetails;
+import com.movierama.lite.shared.events.ReactionAddedEvent;
+import com.movierama.lite.shared.events.ReactionRemovedEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,11 +14,12 @@ import java.util.Optional;
 public class ReactionService {
 
     private final ReactionRepository reactionRepository;
-    private final MovieRepository movieRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public ReactionService(ReactionRepository reactionRepository, MovieRepository movieRepository) {
+
+    public ReactionService(ReactionRepository reactionRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.reactionRepository = reactionRepository;
-        this.movieRepository = movieRepository;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     public void like(Long movieId, CustomUserDetails user) {
@@ -25,19 +28,19 @@ public class ReactionService {
             if (existingReaction.get() == ReactionType.LIKE) {
                 reactionRepository.deleteByUserIdAndMovieIdAndReactionType(user.id(), movieId, existingReaction.get());
                 user.reactions().remove(movieId);
-                movieRepository.decrementLikedCount(movieId);
+                applicationEventPublisher.publishEvent(new ReactionRemovedEvent(this, movieId, ReactionType.LIKE));
             } else {
                 reactionRepository.deleteByUserIdAndMovieIdAndReactionType(user.id(), movieId, existingReaction.get());
                 user.reactions().remove(movieId);
                 reactionRepository.save(new Reaction(movieId, user.id(), ReactionType.LIKE));
                 user.reactions().put(movieId, ReactionType.LIKE);
-                movieRepository.decrementDislikedCount(movieId);
-                movieRepository.incrementLikedCount(movieId);
+                applicationEventPublisher.publishEvent(new ReactionRemovedEvent(this, movieId, ReactionType.DISLIKE));
+                applicationEventPublisher.publishEvent(new ReactionAddedEvent(this, movieId, ReactionType.LIKE));
             }
         } else {
             reactionRepository.save(new Reaction(movieId, user.id(), ReactionType.LIKE));
             user.reactions().put(movieId, ReactionType.LIKE);
-            movieRepository.incrementLikedCount(movieId);
+            applicationEventPublisher.publishEvent(new ReactionAddedEvent(this, movieId, ReactionType.LIKE));
         }
     }
 
@@ -47,19 +50,19 @@ public class ReactionService {
             if (existingReaction.get() == ReactionType.DISLIKE) {
                 reactionRepository.deleteByUserIdAndMovieIdAndReactionType(user.id(), movieId, existingReaction.get());
                 user.reactions().remove(movieId);
-                movieRepository.decrementDislikedCount(movieId);
+                applicationEventPublisher.publishEvent(new ReactionRemovedEvent(this, movieId, ReactionType.DISLIKE));
             } else {
                 reactionRepository.deleteByUserIdAndMovieIdAndReactionType(user.id(), movieId, existingReaction.get());
                 user.reactions().remove(movieId);
                 reactionRepository.save(new Reaction(movieId, user.id(), ReactionType.DISLIKE));
                 user.reactions().put(movieId, ReactionType.DISLIKE);
-                movieRepository.decrementLikedCount(movieId);
-                movieRepository.incrementDislikedCount(movieId);
+                applicationEventPublisher.publishEvent(new ReactionRemovedEvent(this, movieId, ReactionType.LIKE));
+                applicationEventPublisher.publishEvent(new ReactionAddedEvent(this, movieId, ReactionType.DISLIKE));
             }
         } else {
             reactionRepository.save(new Reaction(movieId, user.id(), ReactionType.DISLIKE));
             user.reactions().put(movieId, ReactionType.DISLIKE);
-            movieRepository.incrementDislikedCount(movieId);
+            applicationEventPublisher.publishEvent(new ReactionAddedEvent(this, movieId, ReactionType.DISLIKE));
         }
     }
 }
