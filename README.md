@@ -1,7 +1,5 @@
 # MovieRama Lite
 
-**MovieRama Lite** is a lightweight movie application where users can like or dislike movies, and the system tracks the number of likes and dislikes for each movie. Each user carries their own information about the movies they have liked or disliked. The application is designed for quick rendering and efficient updates of movie reaction counts, with future scalability in mind.
-
 ## Highlights
 
 ### 1. **User Reaction Management**
@@ -10,8 +8,7 @@
 
 ### 2. **Efficient Count Updates**
 - The like and dislike counts for movies are updated asynchronously using **application events**.
-- When a user likes or dislikes a movie, the corresponding event is published and handled asynchronously, ensuring a non-blocking user experience.
-- The current setup updates the counts in real-time, but future improvements could involve batching updates for increased performance at scale.
+- When a user likes or dislikes a movie, the corresponding event is published and handled asynchronously, adding an eventual consistency. The ui itself is getting update realtime.
 
 ### 3. **Optimized for Quick Renders**
 - The application is designed to **eliminate computational overhead** when retrieving the number of likes and dislikes for each movie. Since the counts are maintained independently of the users’ reaction data, this allows for **fast rendering** of movie lists.
@@ -19,10 +16,8 @@
 
 ### 4. **Scalable and Race Condition Resistant**
 - The architecture is designed to **eliminate race conditions** by preventing simultaneous updates to the same database rows. Since user reactions and movie counts are stored separately, updates can be made safely without locking issues.
-- In the future, the async event handling mechanism could be extended to update reaction counts in **batches**, further improving the system’s performance under high loads.
 
 ## Running the Application
-
 The application is containerized using **Docker** and can be easily run using **Docker Compose**. Follow the steps below to get the application up and running.
 
 ### Prerequisites
