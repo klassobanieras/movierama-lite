@@ -1,8 +1,8 @@
 package com.movierama.lite.movie;
 
 import com.movierama.lite.movie.MovieService.MovieOrder;
-import com.movierama.lite.shared.dto.MovieramaUser;
 import com.movierama.lite.shared.dto.MovieDto;
+import com.movierama.lite.shared.dto.MovieramaUser;
 import com.movierama.lite.shared.security.User;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -38,6 +38,7 @@ public class MovieController {
                               @RequestParam(value = "sortBy", defaultValue = "DATE") MovieOrder order,
                               @RequestParam(value = "htmx", defaultValue = "false") boolean htmx,
                               @AuthenticationPrincipal MovieramaUser user) {
+        model.addAttribute("username", Optional.ofNullable(user).map(MovieramaUser::getUsername).orElse(""));
         model.addAttribute("userReactions", Optional.ofNullable(user == null ? null : user.reactions()).orElse(new HashMap<>()));
         model.addAttribute("movies", movieService.findAll(order));
         model.addAttribute("sortBy", order.name());
@@ -48,7 +49,11 @@ public class MovieController {
     }
 
     @GetMapping("/movies/{username}")
-    public String fetchMoviesOfUser(@RequestParam(defaultValue = "DATE") MovieOrder order, @RequestParam(defaultValue = "false") boolean htmx, Model model, @PathVariable String username, @AuthenticationPrincipal MovieramaUser user) {
+    public String fetchMoviesOfUser(@RequestParam(defaultValue = "DATE") MovieOrder order,
+                                    @RequestParam(defaultValue = "false") boolean htmx, Model model,
+                                    @PathVariable String username,
+                                    @AuthenticationPrincipal MovieramaUser user) {
+        model.addAttribute("username", Optional.ofNullable(user).map(MovieramaUser::getUsername).orElse(""));
         model.addAttribute("userReactions", Optional.ofNullable(user == null ? null : user.reactions()).orElse(new HashMap<>()));
         model.addAttribute("movies", movieService.findAllOfUser(order, username));
         model.addAttribute("sortBy", order);

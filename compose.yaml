@@ -1,9 +1,28 @@
 services:
-  postgres:
+  app:
+    image: jtsompos/lite:native
+    container_name: movierama-lite-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/movierama
+      - SPRING_DATASOURCE_USERNAME=myuser
+      - SPRING_DATASOURCE_PASSWORD=mypassword
+    depends_on:
+      - db
+    networks:
+      - lite
+  db:
     image: 'postgres:latest'
+    container_name: db
     environment:
       - 'POSTGRES_DB=movierama'
       - 'POSTGRES_PASSWORD=mypassword'
       - 'POSTGRES_USER=myuser'
     ports:
       - '5432:5432'
+    networks:
+      - lite
+networks:
+  lite:
+    driver: bridge

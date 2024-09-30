@@ -82,10 +82,10 @@ class ReactionService {
             case DISLIKE -> newReaction.movie().withRemoveDislike();
         };
         switch (newReaction) {
-            case Like(MovieramaUser user, MovieDto _) -> {
+            case Like(MovieramaUser user, MovieDto unused) -> {
                 return new Like(user, movie);
             }
-            case Dislike(MovieramaUser user, MovieDto _) -> {
+            case Dislike(MovieramaUser user, MovieDto unused) -> {
                 return new Dislike(user, movie);
             }
         }
